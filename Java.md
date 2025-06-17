@@ -441,7 +441,7 @@ Klassenhierarchie (winziger Auszug):
 
 **Throwable** – Basisklasse für Objekte, die Ausnahmesituationen (Errors und Exception) signalisieren
 
-![throwable](images/java/throwable.png)
+![throwable](images/java/throwable.PNG)
 
 Throwable-Methoden:
 
