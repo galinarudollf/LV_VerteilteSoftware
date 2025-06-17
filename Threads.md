@@ -144,7 +144,7 @@ int MPI_Scatter(
 
 ## Klasse Thread
 
-![klasseThread](images/threads/klasseThread.png)
+![klasseThread](images/threads/klasseThread.PNG)
 
 Konstruktoren (8):
 
@@ -188,7 +188,7 @@ Methoden:
 
 Quelle: Jörg Hettel, Manh Tien Tran: Nebenläufige Programmierung mit Java, dpunkt.verlag
 
-Übergäge 
+Übergänge 
 
 zum BLOCKED: synchronized
 
@@ -288,7 +288,7 @@ public class MainThread {
     }
 }
 ```
-![AusgabeStates](images/threads/AusgabeStates.png)
+![AusgabeStates](images/threads/ausgabeStates.PNG)
 
 ```java
  public class MyThread extends Thread {
@@ -320,7 +320,7 @@ public class MainThread {
 }
 ```
 
-![AusgabeJoin](images/threads/AusgabeJoin.png)
+![AusgabeJoin](images/threads/ausgabeJoin.PNG)
 
 weitere Methoden:
 
@@ -560,7 +560,7 @@ Kapselung eines kritischen Bereiches (nicht zwingend ein Objekt)
 
 **Java-Konstrukte:**
 
-![Javakonstrukte](images/threads/Javakonstrukte.png)
+![Javakonstrukte](images/threads/Javakonstrukte.PNG)
 
 **synchronized**
 
@@ -664,7 +664,7 @@ public class ThreadY extends Thread {
     }
 }
 ```
-![ausgabeSummen](images/threads/ausgabeSummen.png)
+![ausgabeSummen](images/threads/ausgabeSummen.PNG)
 
 Ein gesperrtes Objekt besitzt zusätzlich zur Sperre eine Warteliste
 
@@ -680,7 +680,7 @@ nur innerhalb eines synchronized-Blockes erlaubt!
 
 ### Das Erzeuger-Verbraucher-Problem (producer consumer problem)
 
-![erzeugerVerbraucher](images/threads/erzeugerVerbraucher.png)
+![erzeugerVerbraucher](images/threads/erzeugerVerbraucher.PNG)
 
 Quelle: Prof. B. Steinbach, Vorlesung „Verteilte Software“
 
@@ -1055,17 +1055,17 @@ public class SaunaVisitor implements Runnable {
 
 > Wikipedia: Deadlock oder Verklemmung bezeichnet in der Informatik einen Zustand, bei dem eine zyklische Wartesituation zwischen mehreren Prozessen auftritt, wobei jeder beteiligte Prozess auf die Freigabe von Betriebsmitteln wartet, die ein anderer beteiligter Prozess bereits exklusiv belegt hat.
 
-![deadlock](images/threads/deadlock.png)
+![deadlock](images/threads/deadlock.PNG)
 
 Quelle: https://www.wikiwand.com/de/Deadlock_(Eisenbahn)
 
 Beispiele: 
 
-![deadlock1](images/threads/deadlock1.png)
+![deadlock1](images/threads/deadlock1.PNG)
 
 Lösung: die gleiche Reihenfolge von Sperren
 
-![deadlock2](images/threads/deadlock2.png)
+![deadlock2](images/threads/deadlock2.PNG)
 
 Lösung: Thread2:
 		Sende
@@ -1170,7 +1170,7 @@ ArrayBlockingQueue:
 
 - ConcurrentHashMap: Hashbereich wird in mehrere Lock-Bereiche aufgeteilt
 
-![ConcurrentHashMap](images/threads/ConcurrentHashMap.png)
+![ConcurrentHashMap](images/threads/concurrentHashMap.png)
 
 Quelle: Jörg Hettel, Manh Tien Tran: Nebenläufige Programmierung mit Java, dpunkt.verlag
 
