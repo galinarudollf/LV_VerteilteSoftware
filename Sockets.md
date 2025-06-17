@@ -17,8 +17,7 @@ Das Schichtenmodell wird häufig mit der Kommunikation zwei Personen, die zwei u
 In offenen Systemen sind Übertragungsweg, Protokolle und Anwendung genormt und genau spezifiziert.
 Bekannt sind zwei Schichtenmodelle. Das OSI-Schichtenmodell und das DoD-Schichtenmodell (auch TCP/IP-Referenzmodell genannt). Obwohl das Internet und damit alle Netzwerke auf dem DoD-Schichtenmodell basieren, wird vielfach auf das OSI-Schichtenmodell Bezug genommen. Das OSI-Schichtenmodell wurde später entwickelt, ist feiner gegliedert und flexibler. So lässt das OSI-Schichtenmodell die Zusammenfassung oder Entfernung einzelner Schichten zu.
 
-
-Bild: schichtmodell
+![Schichtmodell](images/sockets/schichtmodell.png)
 
 Quelle: https://de.wikipedia.org/wiki/Internetprotokollfamilie#TCP/IP-Referenzmodell
 
@@ -94,10 +93,13 @@ loopback (localhost)	127.0.0.1	 [::1]
 ### Multicast
 eine Nachrichtenübertragung von einem Punkt zu einer Gruppe - mehrere Ziele
 
+![Multicast](images/sockets/multicast.png)
+
 ### Broadcast
 eine spezielle Form der Mehrpunktverbindung (alle Teilnehmer eines lokalen Netzwerks)
  	eigenes lokales Netz: 255.255.255.255
 
+![broadcast](images/sockets/broadcast.png)
 
 ## Klasse  InetAddress 
 
@@ -197,7 +199,7 @@ Die URL-Verbindungen sind High-Level-Verbindungen, auf dieser Ebene muss man nic
 
 - abstrakte Klasse URLConnection
 
-Bild:urlcollection
+![urlconnection](images/sockets/urlcollection.PNG)
 
 ```java
 URLConnection URL::openConnection() throws IOException
@@ -280,7 +282,7 @@ Jeder beteiligte Rechner implementiert einen Socket: derjenige, der die Verbindu
 - Sender kennt Empfänger (IP-Adresse und Port)
 - Empfänger erfährt die Absenderadresse mit dem Empfang der Nachricht (Pakets)
 	
-Bild: udp
+![UDP](images/sockets/udp.PNG)
 
 **Datenpaket**
 	- Daten
@@ -298,7 +300,7 @@ DatagramPacket(byte[] buf, int length)
 
 Klassen  **DatagramSocket** und **MulticastSocket**
 
-Bild:udpklassen
+![UDPKlassen](images/sockets/udpklassen.PNG)
 
 ```java
 DatagramSocket() throws SocketException	   //any port und local host
@@ -455,11 +457,11 @@ public class UDPMultiCast
 
 TCP Socket – Kommunikationsendpunkt mit zwei Datenströmen
 
-Bild: tcp
+![TCP](images/sockets/tcp.PNG)
 
 Klassen **Socket** und **ServerSocket**
 
-Bild: tcpklassen
+![TCPKlassen](images/sockets/tcpklassen.PNG)
 
 ```java
 Socket(InetAddress endpoint, int port) throws IOException
@@ -813,7 +815,7 @@ public class ServerThread extends Thread {
 - mit getAddress() erhält man InetAddress-Instanz
 - verfügt über weitere Methoden: getHostName(), getPort() etc
 
-Bild: inetsocketaddress
+![inetsocketaddress](images/sockets/inetsocketaddress.PNG)
 
 ```java
 InetSocketAddress(InetAddress addr, int port)
@@ -927,7 +929,7 @@ public class MainActivity extends AppCompatActivity {
 
 **UDP:** Pakete werden zugestellt ohne Garantie, dass alle Pakete ankommen, in der richtigen Reihenfolge, jedes einmal. Ggf. Korrektur –, Sicherungsmaßnahmen notwendig 
 
-Bild: tcpvsudp
+![tcpvsudp](images/sockets/tcpvsudp.PNG)
 
 ## Synchronisation
 
@@ -973,7 +975,8 @@ Sequenznummern: triviale Form einer logischen Uhr
 
 ## Transport Layer Security – TLS 
 
-Bild: tls
+![TLS](images/sockets/tls.png)
+
 Quelle: https://de.wikipedia.org/wiki/Transport_Layer_Security
 
 - Protokoll zur sicheren Datenübertragung über Computernetzwerke, insbesondere im Internet
@@ -1021,7 +1024,7 @@ s. auch https://www.elektronik-kompendium.de/sites/net/1706131.htm
 Die meisten Webbrowser und Betriebssysteme erhalten eine vordefinierten Liste von vertrauenswürdigen Zertifizierungsstellen. Legt der Server ein SSL/TLS-Zertifikat, das von einer dieser Stellen ausgestellt wurde, wird die Verbindung als sicher betrachtet. Andernfalls zeigt der Browser eine Warnung an.
 Hosting-Anbieter für Websites oder Cloud-Plattform- Betreiber bieten ggf. integrierte Funktionen zur Beschaffung und Verwaltung von SSL/TLS-Zertifikaten. 
 
-Bild: tubafzertifikat
+![tubafzertifikat](images/sockets/tubafzertifikat.png)
 
 GEANT Trusted Certificate Services des Deutschen Forschungsnetzes
 https://www.pki.dfn.de/geant-trusted-certificate-services/
