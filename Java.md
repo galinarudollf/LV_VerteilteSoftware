@@ -48,7 +48,7 @@ public interface I3DDrawable extends IDrawable {
 
 ### Kapselung
 
-![kapselung](images/java/kapselung.png)
+![kapselung](images/java/kapselung.PNG)
 
 Kapselung - Verbergen oder Schützen von Daten vor dem unmittelbaren Zugriff von außen. Der Zugriff erfolgt stattdessen über definierte Schnittstellen.
 
@@ -162,7 +162,7 @@ public void say(){
 
 ### Vererbung (Generalisierun)
 
-![vereerbung](images/java/vererbung.png)
+![vererbung](images/java/vererbung.PNG)
 
 ```java
 public class Dog extends Animal{
@@ -265,7 +265,7 @@ public class AndereKlasse {
 
 ### Klasse Object
 
-![object](images/java/object.png)
+![object](images/java/object.PNG)
 
 ```java
 Scanner sc=new Scanner(System.in);
@@ -308,7 +308,7 @@ public class Animal {
 
 ### Innere Klassen
 
-![innereKlassen](images/java/innereKlassen.png)
+![innereKlassen](images/java/innereKlassen.PNG)
 
 ### Interface
 
@@ -371,7 +371,7 @@ task.performTask();
 - Zum Übertragen der Texte (z.B. über Sockets) wird üblicherweise UTF-8 verwendet
 - String ist unveränderbar, threadsicher ( s[0]='A' geht nicht! ), StringBuffer und StringBuilder sind veränderbar
 
-![unicode](images/java/unicode.png)
+![unicode](images/java/unicode.PNG)
 
 Quelle: http://openbook.rheinwerk-verlag.de/javainsel/04_001.html
 
@@ -435,7 +435,7 @@ wird immer ausgeführt, in allen 3 Fällen:
 
 Klassenhierarchie (winziger Auszug):
 
-![exception](images/java/exception.png)
+![exception](images/java/exception.PNG)
 
 **Exception** – Basisklasse für alle Exception
 
@@ -557,7 +557,7 @@ public class AusnahmeRaus {
 
 ## Ein- und Ausgabe
 
-![einAusgabe](images/java/einAusgabe.png)
+![einAusgabe](images/java/einAusgabe.PNG)
 
 Ein-, Ausgabemodell:
 
@@ -573,7 +573,7 @@ Datenarten:
 
 java.io.*
 
-![reader](images/java/reader.png)
+![reader](images/java/reader.PNG)
 Quelle: Prof. B. Steinbach, Vorlesung „Verteilte Software“
 
 ### Dekorator Muster (decorator pattern)
@@ -774,7 +774,7 @@ ArrayList<String> cs=new ArrayList<String>();
 - 15 abstrakte Methoden 
 - die Implementierungen nutzen die equals-Methode
 
-![collection](images/java/collection.png)
+![collection](images/java/collection.PNG)
 
 ```java
 public interface Collection<E> extends Iterable<E> 
@@ -804,7 +804,7 @@ for (int i=0;i<cs.size();i++) {
 } 
 ```
 
-![CollectionInterfaces](images/java/CollectionInterfaces.png)
+![CollectionInterfaces](images/java/CollectionInterfaces.PNG)
 
 Quelle: Jörg Hettel, Manh Tien Tran, Nebenläufige Programmierung mit Java
 
