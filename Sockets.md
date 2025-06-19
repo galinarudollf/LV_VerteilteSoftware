@@ -51,7 +51,6 @@ stellt alle Protokolle für die Anwendungen zur Verfügung, ist zuständig für 
     - Presentation Layer: Umwandlung systemabhängiger Daten, Anpassung zw. Systemen, Datenkompression und Verschlüsselung
 
 ## Internet – Adressen 
-jede IP-Adresse ist weltweit eindeutig
 
 Damit Nachrichten, Pakete bzw. generell Kommunikationsanfragen das richtige Adressat finden, wird jedem Verbindungspunkt (jedem Rechner in Internet) eine eindeutige und zwar eine weltweit eideutige IP-Adresse zugeordnet. Internet Protocol gibt es in den Versionen 4 und 6. 
 Mit IPv4 ist die Adressierung von theoretisch vier Milliarden Rechner möglich. Da aber mit der Zeit das Internet immer größere Verbreitung erlangte, war zu befürchten, dass die Adressen nicht ausreichen werden. Im Dezember 1998 wurde IPv6 offiziell zum Nachfolger von IPv4 ernannt. Damit wurde die Vergrösserung des Adressraums auf 340 Sextllionen erreicht.
@@ -62,23 +61,38 @@ Mit IPv4 ist die Adressierung von theoretisch vier Milliarden Rechner möglich. 
 
 Dezimalnotation 
 0..255,  d.d.d.d	139.20.17.101
+ 
+| <244 	    | einzelne Rechner (Unicast) – Adressen-Klassen A, B und C |
+| 224.. 239 | D-Klasse: Multicast-Adressen, Gruppen-Adressen von 224.0.0.0 bis 239.255.255.255 (jede mit FF00::/8 beginnende Adr.) |
+| >239 	    | E-Klasse: reservierter Bereich |
 
-```  
-<244 	   einzelne Rechner (Unicast) – Adressen-Klassen A, B und C
-224.. 239  D-Klasse: Multicast-Adressen, Gruppen-Adressen von 224.0.0.0 bis 239.255.255.255 (jede mit FF00::/8 beginnende Adr.)
->239 	   E-Klasse: reservierter Bereich
-```
 
+
+ | |Klasse A | Klasse B | Klasse C |
+ | :--------------- | --------- | --------- | -------- |
+ | Adressbereich | 1.0.0.0 – 126.0.0.0 |  1.280.0.0 – 191.255.0.0 |  192.0.0.0 – 233.255.255.0 |
+ | Verwendung | ISPs, sehr große Netzwerke (große Organisationen) | mittlere bis große Netzwerke (Universitäten, Unternehmen) | kleine Netzwerke (kleine Unternehmen) |
+ 
+ 
 **IPv6:** (seit 1998)
 
 128 Bit, 8X16, (2 hoch 128 Adressen)		
 Hexadezimalnotation, (0..ffff)  
 2001:0db8:0000:0000:0000:ff00:0042:8329
 
-Namen (z.B. www.informatik.tu-freiberg.de) werden in IP-Adresse vom Domain Name System (DNS) umgesetzt
+Während es im Netzwerkumfeld gemeinhin zum guten Ton gehört, sinnvolle Dual-Stack-Setups mit Unterstützung für IPv4 und IPv6 zu bauen, sehen viele Anbieter das Thema entspannt: Große Seiten wie GitHub unterstützen IPv6 bis heute nicht. Oft ist in diesem Kontext vom Henne-Ei-Problem die Rede, denn ISPs bieten IPv6 nicht an, weil seitens der Kundschaft vorgeblich die Nachfrage nicht ausreicht – schließlich seien viele Seiten im Netz per IPv6 nicht erreichbar. Vom erklärten Ziel, der absehbaren Knappheit von IPv4-Adressen durch die Vergrößerung des Adressraumes ein Ende zu setzen, ist IPv6 jedenfalls bis heute weit entfernt. Mit IPv4-Adressen hat sich längst ein reger Handel etabliert.
+
+> Geoff Huston (Asia-Pacific Network Information Center), Okt. 2024:  das Ziel, IPv4 vollständig durch IPv6 zu ersetzen, sei in obsolet, CDNs (Content Delivery Network – Netzwerk verteilter Servern), wo primäre DNS-Adressen (nicht IPs) wichtig sind, liefern Webinhalte effizienter und schneller (Quelle: https://www.heise.de/news/APNIC-Chefwissenschaftler-IPv6-Einfuehrung-wohl-obsolet-9995140.html https://www.heise.de/meinung/Kommentar-zu-IPv6-Bremsern-Ist-das-noch-gutes-Internet-10014220.html )
 
 Die IP-Adressen, speziell IPv6 stellen für Rechner kein Problem dar, für uns Menschen mit den Namen zu agieren ist dennnoch viel angenehmer als mit den Nummern. Es werden deswegen parallel zu den Adressen hierarchisch aufgebaute Namen geführt, z.B. www.informatik.tu-freiberg.de
-Die Namen werden von Domain Name System (DNS) in IP-Adresse umgesetzt. Der eigentliche Name des Rechners wird auch als Host-Name (oder einfach Host) bezeichnet.
+
++ Namen (z.B. www.informatik.tu-freiberg.de) werden in IP-Adresse vom Domain Name System (DNS) umgesetzt (wie Telefonauskunft)
++ DNS – ein hierarchisches verteiltes System, ermöglicht die Namensauflösung für das gesamte Internet
+
+![Namensauflösung](images/sockets/namensaufl.png)
+
+Quelle: https://www.seokratie.de/guide/dns/
+
 
 ## Kommunikationsformen
 
@@ -97,7 +111,11 @@ eine Nachrichtenübertragung von einem Punkt zu einer Gruppe - mehrere Ziele
 
 ### Broadcast
 eine spezielle Form der Mehrpunktverbindung (alle Teilnehmer eines lokalen Netzwerks)
- 	eigenes lokales Netz: 255.255.255.255
+
++ eigenes lokales Netz: 255.255.255.255
++ 192.168.1.255 die Broadcast-Adresse des Subnetz 
++ 192.168.1.0/24 (alle IP-Adressen von 192.168.1.1 bis 192.168.1.254)
+  
 
 ![broadcast](images/sockets/broadcast.png)
 
@@ -128,7 +146,7 @@ byte[] getAddress()		//IP-Adresse
 Achtung: Die Adresse allein reicht nicht zur Identifizierung einer Internet-Ressource (einer Webseite, Webservice, Email-Empfänger, Datei, …)!
 Eindeutige Identifikation benötigt mehr Informationen, z.B. Art der Ressource ….
 
-## Uniform Resource Identifier (URI)
+## Uniform Resource Identifier (URI) / Uniform Resource Locator (URL) 
 
 ```
 scheme ":" [ authority ] path [ "?" query ] [ "#" fragment ] 
@@ -168,8 +186,6 @@ public URI(String scheme,
            String fragment) throws URISyntaxException
 ```
 
-## Uniform Resource Locator (URL) 
-
 ### Klasse URL 
 
 ```java
@@ -190,14 +206,14 @@ public URL toURL()
 
 ### URL-Verbindung
 
-- zur Kommunikation mit der URL-Ressource
-- ist eine High-Level-Verbindung z.B. über Übertragungsprotokolle wie http
-- bauen auf Sockets auf 
-
 URL beschreibt eine Ressource. Um darauf zuzugreifen wird Verbindung benötigt. 
 Die URL-Verbindungen sind High-Level-Verbindungen, auf dieser Ebene muss man nicht um die Übertragungsprotokolle kümmern. Alle "höheren" Verbindungen bauen aber auf Sockets auf.
 
-- abstrakte Klasse URLConnection
+
+- zur Kommunikation mit der URL-Ressource
+- ist eine High-Level-Verbindung z.B. über Übertragungsprotokolle wie http
+- bauen auf Sockets auf 
+- abstrakte Klasse(n): java.net.URLConnection (HttpURLConnection)
 
 ![urlconnection](images/sockets/urlcollection.PNG)
 
@@ -253,25 +269,37 @@ public class Show_URLText
 
 ### Socket
 
-- alle höhere Verbindungen bauen auf Socket auf
-- Socket bildet eine Schnittstelle zwischen Transport- und Anwendungsschicht
-- Socket ist ein Verbindungspunkt im Netz: UDP - verbindungslos, TCP - verbindungsorientiert
+- alle höhere Verbindungen (HTTP, FTP, SMTP) basieren auf Sockets
+- Socket ist ein Verbindungspunkt im Netz
+- Socket bildet eine Schnittstelle zwischen Transport- und Anwendungsschicht, kapseln die Details der Transportschicht (UDP: verbindungslos, TCP: verbindungsorientiert)
 - bekommt eine IP-Adresse und Port-Nummer
 - jeder Kommunikationsbeteiligte (Client und Server) implementiert einen Socket
 
+
 Socket-Konzept wurde in 80er Jahre an der Berkley-Universität für UNIX entwickelt und hat der Ausbreitung von Internet verholfen.
 
-Socket dient als eine Schnittstelle zwischen Transport- und Anwendungsschicht im TCP/IP Referenzmodell und kann als ein Verbindungspunkt in einem TCP/IP-Netzwerk betrachtet werden (wie eine Art "Steckdose").
-Mit Hilfe von Socket können Anwendungen programmiert werden, die über UDP und TCP kommunizieren. UDP-Socket unterstützen eine verbindunglose Kommunikation. Über sie können die Daten nur sendet und empfangen werden.
-TCP Socket baut zusätzlich eine Verbindung auf. Die Verbindung bleibt bestehen für die gesamte Dauer der Datenübertragung.
-Jeder beteiligte Rechner implementiert einen Socket: derjenige, der die Verbindung initiiert und Daten sendet (einen Client-Socket) und derjenige, der auf eingehende Verbindungen horcht, einen Server-Socket. 
-
-
 **Port-Nummer**
-	System-Ports: 0..1023 ("well-known" System Ports, auch Contact Ports genannt)
-	User-Ports: 1024..65535
 
-	z.B. 443 – HTTPS, 80 – HTTP, 20 - FTP	(TCP DATA Port)	
+System-Ports: 0 bis 1023 („well known“)
+
+ - sind für Netzwerkdienste vorgesehen
+
+
+Registrierte Ports: 1.024 bis 49.151 
+
+- in der Regel von Softwareunternehmen registriert,           
+- IANA (Internet Assigned Numbers Authority)
+  
+Dynamische Ports oder private Ports: 49.152 bis 65.536
+
+-  für die dynamische Zuordnung an Clientprogramme
+  
+
+443 – HTTPS, 80 – HTTP, 21 – FTP, 25 – SMTP
+
+Liste der IANA-Zuordnungen: 
+https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.txt
+
 
 
 ### Verbindungslose Kommunikation – UDP (User Datagram Protocol)
@@ -289,7 +317,8 @@ Jeder beteiligte Rechner implementiert einen Socket: derjenige, der die Verbindu
 	- IP-Adresse des Ziels
 	- Portnummer
 	- Absenderadresse
-
+  - Gesamtlänge und Check-Summe (nur Kontrolle)
+  
 Klasse  **DatagramPacket**
 
 ```java
@@ -395,52 +424,93 @@ public class UDPReceive
 }
 ```
 
+### Broadcast
+
+- Broadcast-Funktionalität aktivieren mit setBroadcast(true)
+- Senden an eigenes lokales Netz (255.255.255.255) oder die Broadcast-Adresse des Subnetzes 
+- weiter wie gehabt
+
+
 ### Multicast (mehrere Empfänger):
  
 - Senden per UDP an Klasse D Adressen (224.0.0.0-239.255.255.255)
-- Empfangen an Multicast-Adresse/Portnummer mit dem Multicast-Socket 
-	```MulticastSocket(int port)```
+- Empfangen an Multicast-Adresse/Portnummer mit dem Multicast-Socket `MulticastSocket(int port)`
  
 - Beitreten einer Empfängergruppe
-   ```void joinGroup(InetAddress addr) throw IOException```
+  
+```java
+NetworkInterface netIf = NetworkInterface.getByName("Ie0");
+// identif. lokale Schnittstelle, an der eine Multicast-Gruppe angeschlossen ist
+void joinGroup(SocketAddress group, NetworkInterface netIf) throw IOException
+```
 
 - Empfangen mit receive
 
-- Verlassen der Empfängergruppe
-    ```void leaveGroup(InetAddress addr) throw IOException```
+- Verlassen der Empfängergruppe `void leaveGroup(SocketAddress group, NetworkInterface netIf) throw IOException`
 
-### Beispiel
+### Beispiele
+
 ```java
 /* empfange 3 UDP Pakete als Multi-Cast*/
 import java.io.*;
 import java.net.*;
-public class UDPMultiCast
-{ public static void main( String args[] ) 
-  {
-	  int port = 12345;        
-    byte[] buffer = new byte[1500];    
-    DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
-    MulticastSocket mc_socket; 				
-    InetAddress group;
-    try
-    { 
-      group = InetAddress.getByName("239.255.255.255");
-      mc_socket = new MulticastSocket(port);
-      mc_socket.joinGroup(group);
-      for (int i = 0; i < 3; i++)
-      { 
-        mc_socket.receive(packet);
-        String s = new String( buffer, 0, packet.getLength() );
-        System.out.println("MultiCastReceive: from "      
-           + packet.getAddress().getHostName() 
-           + ":" + packet.getLength() + ":" + packet.getPort() + ":" + s );
-        packet.setLength(buffer.length);
-      }
-      mc_socket.leaveGroup(group);
-      mc_socket.close();
-    }
-    catch (SocketException e | IOException e) {System.out.println(e);}
+public class UDPMultiCast{ 
+  public static void main( String args[] )  {
+     int port = 55555; 
+     byte[] buffer = new byte[1024]; 
+     DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
+     MulticastSocket mc_socket; 
+     InetAddress adr;
+     InetSocketAddress group;
+     try
+     { adr = InetAddress.getByName("239.255.255.255");
+       group = new InetSocketAddress(adr, port);
+       NetworkInterface netIf = NetworkInterface.getByName("Ie0");
+       mc_socket = new MulticastSocket(port);
+       mc_socket.joinGroup(group,netIf);
+       for (int i = 0; i < 3; i++)
+       { mc_socket.receive(packet);
+         String s = new String( buffer, 0, packet.getLength() );
+         System.out.println("MultiCastReceive: from " 
+                            + packet.getAddress().getHostName() 
+                            + ":" + packet.getLength() + ":" + packet.getPort() + ":" + s );
+         packet.setLength(buffer.length);
+       }
+       mc_socket.leaveGroup(group, netIf);
+       mc_socket.close();
+     }
+     catch ( IOException e) {System.out.println(e);}
   }
+}
+
+```
+
+```java
+import java.net.DatagramSocket;
+import java.net.DatagramPacket;
+import java.net.InetAddress;
+
+public class UdpBroadcastBeispiel {
+    public static void main(String[] args) {
+        try {
+            DatagramSocket socket = new DatagramSocket();
+            socket.setBroadcast(true); // Aktivieren der Broadcast-Option
+
+            String message = "Broadcast Nachricht";
+            byte[] buffer = message.getBytes();
+
+            // Broadcast-Adresse (z.B. 255.255.255.255 
+            // oder die spezifische Subnetz-Broadcast-Adresse)
+            InetAddress broadcastAddr = InetAddress.getByName("255.255.255.255");
+
+            DatagramPacket packet = new DatagramPacket(buffer, buffer.length, broadcastAddr, 55555);
+            socket.send(packet);
+            
+            socket.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
 ```
 
@@ -561,10 +631,10 @@ public class TCPServer {
 ```
 
 **Nachteil der Single-Thread-Anwendung:**
-	es kann die Anfrage nur eines Clients bearbeitet werden, andere Anfragen müssen warten
+es kann die Anfrage nur eines Clients bearbeitet werden, andere Anfragen müssen warten
 
 **Lösung:** 
-             Kommunikationssocket an ein Thread oder ExecutorService weiter reichen
+Kommunikationssocket an ein Thread oder ExecutorService weiter reichen
 
 ```java
 /* empfange 3 Nachrichten über Socket vom TCP-Clients und sende jeweils eine Antwort */
@@ -591,6 +661,7 @@ public class TCPMultiServer{
     }
 }
 ```
+
 ```java
 class ServerThread extends Thread{   
     Socket socket;
@@ -623,6 +694,7 @@ class ServerThread extends Thread{
 ```
 
 ### Beispiel:
+
 ```java
 public class Server {
   public static void main(String[] args) {
@@ -638,6 +710,7 @@ public class Server {
   }
 }
 ```
+
 ```java
 public class ServerThread extends Thread {
 Socket socket;
@@ -722,6 +795,7 @@ public class Daten implements Serializable  {
 	}
 }
 ```
+
 ```java
 import java.io.IOException;
 import java.io.NotSerializableException;
@@ -756,6 +830,7 @@ public static void vorbereite(Daten daten){ /*…*/ }
 }
 
 ```
+
 ```java
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -775,6 +850,7 @@ public class ServerDaten {
   }
 }
 ```
+
 ```java
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -841,7 +917,513 @@ Socket socket = new Socket();
 socket.connect( addr, 100 ); //timeout in 100 ms
 ```
 
+
+
+### TCP vs UDP
+
+> Was ist das Beste an TCP-Witzen? 
+> Ich kann sie so lange erzählen, bis man sie versteht 
+
+
+**TCP:** Pakete werden nacheinander zugestellt, vollständig, in der richtigen Reihenfolge und nicht doppelt
+
+**UDP:** Pakete werden zugestellt ohne Garantie, dass alle Pakete ankommen, in der richtigen Reihenfolge, jedes einmal. Ggf. Korrektur –, Sicherungsmaßnahmen notwendig 
+
+![tcpvsudp](images/sockets/tcpvsudp.PNG)
+
+## Synchronisation
+
+TCP:  verwendet Sequenznummern
+
+Sequenznummern: triviale Form einer logischen Uhr
+
+**Funktionsschema:**
+
+- Jedem Paket wird eine Sequenznummer zugeordnet und die nächste Sequenznummer mit abgeschickt
+- Empfänger kennt aus der Sequenznummer des vorangegangenes Pakets, welche Nachricht dran ist 
+- Wird die Nachricht mit der niedrigeren Nummer empfangen, so wird sie verworfen
+- Die Nachricht mit der höheren Nummer wird empfangen und in den Zwischenspeicher abgelegt
+- Wenn die Nachricht mit der richtigen Nummer angekommen ist, wird Zwischenspeicher abgearbeitet
+- Kommt die Nachricht nicht, wird sie nach einer gewissen Zeit von Sender abgefordert
+- Nach einer gewissen Anzahl erfolgslosen Rückfragen bricht die Kommunikation mit einer Fehlermeldung ab
+
+Konzepte, die verwendet werden, um Ereignisse oder Aktionen in verteilten Systemen zu organisieren und zu synchronisieren:
+
+**Echtzeituhr:**
+
+- misst physikalische Zeit 
+- Synchronisation erfolgt, z.B. mittels Abfrage von Zeitservern und Umrechnungen der Verzögerung durch Übertragungszeit (verschiedene Algorithmen, Standard: Network Time Protokoll)
+
+**Logische Uhr:**
+
+- misst nicht die physikalische Zeit, gib den  Ereignissen einen eindeutigen (logischen) Zeitstempel
+- erzeugt streng monoton steigende Werte, um den Ereignissen eine Kasualordnung zuzuweisen
+
+
+Verfahren zum Zuweisen von eindeutigen Zeitstempeln an Nachrichten:
+
+**Lamport-Uhr:**
+- Jeder Prozess hat einen Zähler (die Uhr)
+- Der aktuelle Stand des Zählers wird an jede Nachricht als Zeitstempel angehängt
+- Zähler wird bei jedem Ereignis (Senden und Empfangen) erhöht: wenn eine Nachricht empfangen wird, deren Zeitstempel größer oder gleich dem aktuellen Stand der eigenen Uhr ist, wird der Wert der Uhr um eins erhöht. 
+- Nachteil: unbekannt, welche Ereignisse kausal unabhängig (nebenläufig) sind
+
+**Vektoruhr:**
+- Berücksichtigt Nebenläufigkeit
+- die Uhr jedes Prozesses besteht aus einem Vektor (Array), nicht nur einem Zähler
+- Jeder Prozess merkt sich den Zählerstand aller anderen Prozesse
+- Der aktuelle Stand der Uhr wird jeder gesendeten Nachricht angehängt 
+- Bei jedem Ereignis wird immer nur der eigene Zähler erhöht
+- Wird eine Nachricht empfangen, werden aus dem aktuellen und dem empfangenen Vektor elementweise Maxima gebildet
+
+## Transport Layer Security – TLS 
+
+![TLS](images/sockets/tls.png)
+
+Quelle: https://de.wikipedia.org/wiki/Transport_Layer_Security
+
+- Protokoll zur sicheren Datenübertragung über Computernetzwerke, insbesondere im Internet
+- Aufgabe: die Echtheit des kontaktierten Servers durch ein Zertifikat zu garantieren und die Verbindung zwischen Client und Server zu verschlüsseln.
+
+**Bestandteile:** 
+
+TLS Handshake - findet Schlüsselaustausch und eine Authentifizierung statt 
+
+TLS Record - verwendet den im Handshake ausgehandelten symmetrischen Schlüssel für eine sichere Datenübertragung – die Daten werden verschlüsselt und mit einem MAC (Message Authentication Code) gegen Veränderungen geschützt übertragen. 
+
+**Anwendung:**
+
+- theoretisch auf alle denkbare Anwendungsprotokolle: HTTP (-Secure), SMTPS, POPS,  IMAPS, …
+
+### TLS-Funktionsweise
+
+Der Client baut eine Verbindung zum Server auf. 
+
+Der Server schickt als Antwort seinen öffentlichen Schlüssel (public Key) und ein SSL/TLS Zertifikat zur Authentifizierung. Beim ersten „Kontakt“ nutzt TLS die asymmetrische Verschlüsselung. 
+
+Der Client überprüft die Vertrauenswürdigkeit des Zertifikats und ob der Servername mit dem Zertifikat übereinstimmt. Optional kann sich der Client mit einem eigenen Zertifikat auch gegenüber dem Server authentifizieren. 
+
+Der Client schickt dem Server einen symmetrischen privaten Schlüssel (eine mit dem öffentlichen Schlüssel des Servers verschlüsselte geheime Zufallszahl), oder beide berechnen den (kombinierten) Schlüssel mit dem Diffie–Hellman-(Merkle) -Schlüsselaustausch (DHM-Protokoll zur Schlüsselvereinbarung).
+
+Dieser Schlüssel wird benutzt, um alle Nachrichten zu verschlüsseln und durch einen Message Authentication Code abzusichern.
+
+### Moderne kryptographische Verfahren:
+
+**Symmetrische Verschlüsselung:**
+
+- ein Schlüssel für Verschlüsselung und Entschlüsselung von Daten ("geheimer Schlüssel" )
+- schnell und effizient, eignet sich gut für die Verschlüsselung großer Datenmengen
+- Herausforderung: der geheime Schlüssel sicher zwischen den Kommunikationspartnern auszutauschen
+
+**Asymmetrische (öffentliche) Verschlüsselung:**
+
+- zwei Schlüssel (öffentlicher und privater Schlüssel): der öffentliche Schlüssel zum Verschlüsseln oder zum überprüfen von Signaturen, der private Schlüssel zum Entschlüsseln/Signieren von Daten. Der private Schlüssel kann nicht mit realistischem Aufwand aus dem öffentlichen Schlüssel berechnet werden. 
+- ist in der Regel langsamer und rechenintensiver als symmetrische Verschlüsselung
+- wird daher oft für den sicheren Austausch von Schlüsseln und die digitale Signierung verwendet, während die eigentliche Datenverschlüsselung mit einem symmetrischen Schlüssel erfolgt
+
+
+### Ein SSL/TLS-Zertifikat 
+
+ist eine Datei, die von einer vertrauenswürdigen Zertifizierungsstelle (Certificate Authority, CA) ausgestellt wird. 
+
+- enthält Informationen zur Identität des Servers bzw. der Website (Inhaber, Domane, …) , ein Ablaufdatum etc.
+- Die Zertifikate werden bei Zertifizierungsstellen (ein Unternehmen, eine Non-Profit-Organisation oder eine Behörde ) beantragt. Weltweit gibt es weit über 700 Zertifizierungsstellen. 
+- Die Zertifizierungsdienstanbieter unterliegen der Aufsicht der Bundesnetzagentur.
+- Hosting-Anbieter für Websites oder Cloud-Plattform-Betreiber bieten ggf. integrierte Funktionen zur Beschaffung und Verwaltung von SSL/TLS-Zertifikaten. 
+- Zertifizierungsstellen überprüfen und bestätigen die Identität des Antragstellers. 
+- Zertifikat wird von der Zertifizierungsstelle digital signiert, um seine Echtheit zu gewährleisten. 
+- Es gibt insgesamt drei Zertifikatstypen (Domain-Validated-Zertifikat – DV, Organisation-Validation-Zertifikat – OV, Extended-Validation-Zertifikat – EV), die sich durch einen unterschiedlichen Prüfaufwand bei der Zertifizierung unterscheiden und so eine entsprechend unterschiedliche Echtheitsstufe garantieren (https://www.elektronik-kompendium.de)
+- TLS verwendet Zertifikate, die nach X.509-Internet-Standard formatiert sind, d.h. enthalten die Informationen zur Identität und den öffentlichen Schlüssel.
+
+**Vertrauenswürdige Zertifikate**
+
+Die Webbrowser und Betriebssysteme verfügen über eine vordefinierte Liste von vertrauenswürdigen Zertifizierungsstellen. 
+Nur Verbindungen zu den Servern mit diesen SSL/TLS-Zertifikaten werden als sicher betrachtet. Andernfalls zeigt der Browser eine Warnung an.
+
+
+![tubafzertifikat](images/sockets/tubafzertifikat.png)
+
+GEANT Trusted Certificate Services des Deutschen Forschungsnetzes
+https://www.pki.dfn.de/geant-trusted-certificate-services/
+
+certmgr.msc
+
+![certmgr](images/sockets/cert1.png)
+
+![certAndroid](images/sockets/cert2.png)
+
+Selbst signierten Zertifikate - für interne Testzwecke für Anwendung,  Website (werden nicht von Standard-Browsern und Anwendungen als vertrauenswürdig angesehen)
+
+Tools: OpenSSL (plattformunabhängig) , JDK keytool, …
+
+keytool -genkey -alias mycert -keyalg RSA -keystore keystore.jks
+
+Meldung: Generieren von Schlüsselpaar (Typ RSA, 3.072 Bit) und selbst signiertem Zertifikat (SHA384withRSA) mit einer Gültigkeit von 90 Tagen
+        für: CN=Unknown, OU=IFI, O=TUBAF, L=Freiberg, ST=Sachsen, C=DE
+
+Struktur eines X.509-v3-Zertifikats:
+
+- Zertifikat 
+  - Version 
+  - Seriennummer 
+  - Algorithmen-ID 
+  - Aussteller 
+  - Gültigkeit (von, bis)
+  - Zertifikatinhaber 
+  - Zertifikatinhaber-Schlüsselinformationen 
+      - Public-Key-Algorithmus 
+      - Public Key des Zertifikatinhabers
+  - Eindeutige ID des Ausstellers (optional) 
+  - Eindeutige ID des Inhabers (optional) 
+  - Erweiterungen (mit ID, Flag: kritisch/unkritisch, Wert), z.B. KeyUsage: für welche Anwendung dieses Zertifikat ausgestellt wurde. 
+- Zertifikat-Signaturalgorithmus 
+- Zertifikat-Signatur
+
+Aussteller und Zertifikatinhaber werden jeweils durch eine Reihe von Attributen charakterisiert: 
+
+- Gebräuchlicher Name (CN) 
+- Organisation (O) 
+- Organisationseinheit (OU) 
+- Land/Region (C) 
+- Bundesstaat (ST) 
+- Ort (L)
+
+### SSLSocket 
+
+wird verwendet um eine sichere Kommunikation über das Transport Layer Security (TLS)-Protokoll zu ermöglichen
+Fügt eine Sicherheitsschicht über das zugrunde liegende Netzwerktransportprotokoll, wie z. B. TCP, hinzu
+
+Vorgehensweise:
+
+- SSLContext definieren und initialisieren: die Auswahl des SSL/TLS-Protokolls und die Konfiguration von Verschlüsselung und Authentifizierung:
+
+```java
+SSLContext sslContext = SSLContext.getInstance("TLS");
+sslContext.init(keyManagers, trustManager, secure_random);
+// the source of randomness for this generator or null
+```
+
+- TrustManager und KeyManager konfigurieren: beim Client wird ein TrustManager implementiert, um das Zertifikat des Servers zu überprüfen, beim  Server ein KeyManager, das Zertifikat für Clients bereitstellt.
+- Verbindung herstellen: mit Hilfe einer SSLSocketFactory ein SSLSocket erstellen. Dieses SSLSocket kann dann für die Kommunikation auf eine „bekannte Weise“ verwendet werden.
+
+```java
+import javax.net.ssl.*;
+import java.security.KeyManagementException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
+
+public class TLSServer {
+   public static void main(String[] args) throws KeyManagementException, IOException, CertificateException, UnrecoverableKeyException, KeyStoreException, NoSuchAlgorithmException {
+   // Laden des Serverzertifikats und des privaten Schlüssels aus einer KeyStore-Datei
+   char[] keyPassword = "xxx".toCharArray();
+   String keystorePath = "C:\\Pfad\\keystore.jks";
+   KeyStore keystore = KeyStore.getInstance("JKS");//fuer Store-Typ Java Keystore
+   keystore.load(new FileInputStream(keystorePath), keyPassword);
+
+   //KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance("SunX509");
+   KeyManagerFactory keyManagerFactory =  KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
+   keyManagerFactory.init(keystore, keyPassword);
+   KeyManager[] keyManagers = keyManagerFactory.getKeyManagers();
+   SSLContext sslContext = SSLContext.getInstance("TLS");
+   sslContext.init(keyManagers, null, null);
+´
+   // Erstellen eines SSL-Serversockets
+   SSLServerSocketFactory serverSocketFactory = sslContext.getServerSocketFactory();
+   SSLServerSocket serverSocket = (SSLServerSocket) serverSocketFactory.createServerSocket(55555); 
+   
+   System.out.println("Server wartet auf Verbindung...");
+   SSLSocket socket = (SSLSocket) serverSocket.accept();
+   Scanner scanner = new Scanner(socket.getInputStream());
+   while (scanner.hasNextLine()) System.out.println("Server received: " + scanner.nextLine());       
+   scanner.close();
+   socket.close();
+   serverSocket.close();
+  }}
+```
+
+Achtung: keine Passphrasen im Klartext sondern Umgebungsvariablen oder anderer sicherer Konfigurationstechniken! (`String keyPassword = System.getenv("KEYSTORE_PASSWORD");`)
+
+Um Informationen über die aktuellen Verschlüsselungseinstellungen einer SSL/TLS-Verbindung abzurufen:
+
+```java
+SSLSocket socket = (SSLSocket) serverSocket.accept();
+SSLSession sslSession = socket.getSession();
+String cipherSuite = sslSession.getCipherSuite();
+//verhandelte Cipher Suite, die sicher und 
+//von beiden Seiten unterstützt wird 
+System.out.println(cipherSuite);
+
+System.out.println("Supported Cipher Suites: "
++ Arrays.toString((
+(SSLServerSocketFactory)SSLServerSocketFactory
+                      .getDefault())
+                      .getSupportedCipherSuites()));
+```
+
+Ausgabe:
+
+TLS_AES_256_GCM_SHA384
+
+Supported Cipher Suites: [TLS_AES_256_GCM_SHA384, TLS_AES_128_GCM_SHA256, TLS_CHACHA20_POLY1305_SHA256, TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384, TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256, TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256, TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384, TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256, TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256, TLS_DHE_RSA_WITH_AES_256_GCM_SHA384, TLS_DHE_RSA_WITH_CHACHA20_POLY1305_SHA256, TLS_DHE_DSS_WITH_AES_256_GCM_SHA384, TLS_DHE_RSA_WITH_AES_128_GCM_SHA256, TLS_DHE_DSS_WITH_AES_128_GCM_SHA256, TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384, TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384, TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256, TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256, TLS_DHE_RSA_WITH_AES_256_CBC_SHA256, TLS_DHE_DSS_WITH_AES_256_CBC_SHA256, TLS_DHE_RSA_WITH_AES_128_CBC_SHA256, TLS_DHE_DSS_WITH_AES_128_CBC_SHA256, TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA, TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA, TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA, TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA, TLS_DHE_RSA_WITH_AES_256_CBC_SHA, TLS_DHE_DSS_WITH_AES_256_CBC_SHA, TLS_DHE_RSA_WITH_AES_128_CBC_SHA, TLS_DHE_DSS_WITH_AES_128_CBC_SHA, TLS_RSA_WITH_AES_256_GCM_SHA384, TLS_RSA_WITH_AES_128_GCM_SHA256, TLS_RSA_WITH_AES_256_CBC_SHA256, TLS_RSA_WITH_AES_128_CBC_SHA256, TLS_RSA_WITH_AES_256_CBC_SHA, TLS_RSA_WITH_AES_128_CBC_SHA, TLS_EMPTY_RENEGOTIATION_INFO_SCSV]
+
+- Eine SSLSession repräsentiert den Zustand einer SSL/TLS-Verbindung und enthält Informationen über die aktuellen Verbindungsparameter inkl. Verschlüsselungseinstellungen. 
+- Die Verschlüsselungssuite (Cipher Suite) beschreibt, wie die Daten verschlüsselt und authentifiziert werden. 
+
+```java
+public class TLSClient {
+public static final String[] text= {"Hat der alte Hexenmeister",
+   "Sich doch einmal wegbegeben!", 
+   "Und nun sollen seine Geister", 
+   "Auch nach meinem Willen leben."};
+
+public static void main(String[] args) throws NoSuchAlgorithmException, IOException, CertificateException, InterruptedException, KeyManagementException, KeyStoreException { 
+     // Konfigurieren der SSL-Verbindung
+     SSLContext sslContext = SSLContext.getInstance("TLS");
+     TrustManager[] trustManagers = {
+        new X509TrustManager() { /*…*/ }
+    };
+    sslContext.init(null, trustManagers, new SecureRandom());
+    SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
+    SSLSocket socket = (SSLSocket) sslSocketFactory.createSocket("localhost", 55555);
+    // um neue Verschlüsselungsschlüssel auszuhändigen, oder eine neue Sitzung zu initialieren: 
+    // socket.startHandshake();
+    PrintWriter printWriter = new PrintWriter(socket.getOutputStream());
+    System.out.println("encrypted messages follow");
+    for (int i = 0; i < text.length; i++) {
+        printWriter.println(text[i]);
+        printWriter.flush();
+        TimeUnit.SECONDS.sleep(1);
+    }
+    socket.close();
+ }
+}
+
+TrustManager[] trustManagers = { new X509TrustManager() {
+  @Override
+  public void checkClientTrusted(java.security.cert.X509Certificate[] certs, String authType) throws CertificateException {
+  // Überprüfungslogik für das Clientzertifikat hier, falls erforderlich
+  }
+
+  @Override
+  public void checkServerTrusted(java.security.cert.X509Certificate[] certs, String authType) 
+  // certs beinhaltet vom Server präsentierte Zertifikats throws CertificateException {
+  System.out.println("Ueberpruefung des Serverzertifikat"); 
+     if (certs[0]==getAcceptedIssuers()[0]) System.out.println("Stimmen überein");
+     // Überprüfen der Gültigkeit des Zertifikats
+     certs[0].checkValidity(); // eine CertificateException, wenn das Zertifikat ungültig
+  }
+
+  @Override
+  public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+  //gibt eine Liste der Zertifizierungsstellen aus dem verfügbaren Truststore zurück
+   char[] keyPassword = "xxx".toCharArray();
+   String keystorePath = "C:\\Pfad\\keystore.jks";
+   java.security.cert.X509Certificate[] certarray=new java.security.cert.X509Certificate[1];
+   KeyStore keystore;
+   try {
+     keystore = KeyStore.getInstance("JKS");
+     keystore.load(new FileInputStream(keystorePath), keyPassword);
+     certarray[0]=(X509Certificate) keystore.getCertificate("mycert");
+     return certarray;
+   } catch (KeyStoreException | NoSuchAlgorithmException | CertificateException | IOException e){
+     return null;
+   }
+}}};
+```
+
+Zusammenfassung:
+
+- Für die Verwendung von TLS benötigt Server ein von einer Zertifizierungsstelle (CA) erworbenes oder selbst signiertes Zertifikat.
+- Für Server ist daher die Implementierung von KeyManager erforderlich.
+- Client benötigt im allgemeinen kein eigenes Zertifikat (es sei denn, der Server verlangt eine Client-Authentifizierung), muss aber das Zertifikat des Servers kennen.
+- Dabei kann es sich um ein bereits installiertes Root-Zertifikat handeln oder ein selbst signiertes (kann aus einer Datei gelesen werden). 
+- Wenn eigener TrustStore verwendet wird, ist im Client die getAcceptedIssuers() des TrustManagers zu implementieren. Diese wird ggf. automatisch vom TLS-Protokoll aufgerufen wenn eine Verbindung aufgebaut wird, um zu prüfen, ob das Server-Zertifikat vertrauenswürdig ist.
+- Bei Verwendung von Systemeigenen TrustStores (vom Betriebssystem bereitgestellten Root-CA-Zertifikaten) wird die Standardimplementierung verwendet.
+
+```java
+// Initialize SSL context using the default trust store
+KeyStore keyStore = KeyStore.getInstance("AndroidCAStore");
+keyStore.load(null);
+TrustManagerFactory trustManagerFactory =
+              TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+trustManagerFactory.init(keyStore);
+SSLContext sslContext = SSLContext.getInstance("TLS");
+sslContext.init(null, trustManagerFactory.getTrustManagers(), null);
+```
+
+```java
+public X509Certificate[] getAcceptedIssuers() {
+    try {
+        char[] keyPassword = "xxx".toCharArray();
+        String keystorePath = "keystore.jks"; 
+        KeyStore keystore = KeyStore.getInstance("JKS");
+        keystore.load(new FileInputStream(keystorePath), keyPassword);
+        // Client-Zertifikat aus dem JKS-KeyStore
+        X509Certificate z_client = (X509Certificate) keystore.getCertificate("mycert"); 
+        // Windows-Root-Zertifikate
+        KeyStore ks = KeyStore.getInstance("Windows-MY");
+        ks.load(null, null);
+        Enumeration<String> en = ks.aliases();
+                List<X509Certificate> certList = new ArrayList<X509Certificate>();
+        certList.add(z_client); 
+        while (en.hasMoreElements()) {
+            String aliasKey = en.nextElement();
+            X509Certificate c = (X509Certificate) ks.getCertificate(aliasKey);
+            certList.add(c);
+        }
+        X509Certificate[] certArray = new X509Certificate[certList.size()];
+        certArray = certList.toArray(certArray);
+        return certArray;
+    } catch (KeyStoreException | NoSuchAlgorithmException | CertificateException | IOException e)  
+    {
+        e.printStackTrace();
+        return null;
+    }
+}
+```
+
+### HttpsURLConnection
+
+- Klasse javax.net.ssl.HttpsURLConnection abgeleitet von java.net.HttpURLConnection
+- Zum Zugriff auf die HTTPS-Ressource
+- Verwendet SSL/TLS-Protokoll zur Verschlüsselung und Authentifizierung
+
+Methoden:
+
+connect(): baut die tatsächliche Verbindung auf, nachdem alle Konfigurationen und Einstellungen vorgenommen wurden
+
+getInputStream(): gibt den InputStream zurück.
+
+getOutputStream(): gibt den OutputStream zurück
+
+setSSLSocketFactory(SSLSocketFactory sslSocketFactory): das Setzen einer benutzerdefinierten SSL-Socket-Fabrik für die HTTPS-Verbindung, um spezifische SSL-Konfigurationen zu verwenden.
+
+setHostnameVerifier(HostnameVerifier hostnameVerifier): erlaubt die Festlegung eines Hostnamen-Verifizierers für die Verbindung, um zu überprüfen, ob der Name des Zielservers mit dem Zertifikat übereinstimmt
+
+setRequestMethod(String method): legt die Anfrage-Methode fest (GET, POST, PUT usw.), die für die Verbindung verwendet werden soll.
+
+getResponseCode(): Liefert den HTTP-Statuscode der Antwort zurück, ob die Anfrage erfolgreich war : 200 bzw. fehlerhaft und viele andere.
+
+```java
+//inspiriert von https://mkyong.com/java/java-https-client-httpsurlconnection-example/
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.security.cert.Certificate;
+import java.io.*;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLPeerUnverifiedException;
+public class HttpsClient {
+  public static void main(String[] args) {
+    String https_url = "https://www.google.com/";
+    URL url;
+    try {
+      url = new URI(https_url).toURL();
+      HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
+       /*HostnameVerifier customHostnameVerifier = (HostnameVerifier) new CustomHostnameVerifier();
+        connection.setHostnameVerifier(customHostnameVerifier);
+        connection.connect();
+      */
+      print_cert_info(connection);
+      print_content(connection);
+    } catch (IOException e) {
+      e.printStackTrace();
+    } catch (URISyntaxException e) {
+      e.printStackTrace();  
+    } 
+  }
+
+  private static void print_cert_info(HttpsURLConnection con) {
+    if (con != null) {
+      try {
+        System.out.println("Response Code : " + con.getResponseCode());
+        System.out.println("Cipher Suite : " + con.getCipherSuite());
+        System.out.println("\n");
+        Certificate[] certs = con.getServerCertificates();
+        for (Certificate cert : certs) {
+          System.out.println("Cert Type : " + cert.getType());
+          System.out.println("Cert Hash Code : " + cert.hashCode());
+          System.out.println("Cert Public Key Algorithm : " + cert.getPublicKey().getAlgorithm());
+          System.out.println("Cert Public Key Format : " + cert.getPublicKey().getFormat());
+          System.out.println("\n");
+        }
+      } catch (SSLPeerUnverifiedException e) {
+        e.printStackTrace();
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
+  } 
+
+  private static void print_content(HttpsURLConnection con) {
+    if (con != null) {
+      try {
+        BufferedReader br = new BufferedReader(new  InputStreamReader(con.getInputStream()));
+        String input;
+        while ((input = br.readLine()) != null) {
+            System.out.println(input);
+          }
+        br.close();
+      } catch (IOException e) { e.printStackTrace(); }
+    }
+  }
+}
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLSession;
+public class CustomHostnameVerifier implements HostnameVerifier {
+  @Override
+  public boolean verify(String hostname, SSLSession session) {
+    // Implementierung der Hostnamen-Überprüfung
+    // Rückgabe von true, falls der Hostname als vertrauenswürdig akzeptiert wird
+    // Rückgabe von false, falls der Hostname nicht vertrauenswürdig ist
+    // String trustedHostname = "www.tu-freiberg.de";
+    // return hostname.equalsIgnoreCase(trustedHostname);
+    // Certificate[] certs = session.getPeerCertificates();
+    // Hier: Akzeptiere alle Hostnamen
+    return true;
+  }
+}
+
+
+Ausgabe:
+Response Code : 200
+Cipher Suite : TLS_AES_256_GCM_SHA384
+
+Cert Type : X.509
+Cert Hash Code : -2144387433
+Cert Public Key Algorithm : EC
+Cert Public Key Format : X.509
+
+Cert Type : X.509
+Cert Hash Code : 266225904
+Cert Public Key Algorithm : RSA
+Cert Public Key Format : X.509
+
+Cert Type : X.509
+Cert Hash Code : 1081005260
+Cert Public Key Algorithm : RSA
+Cert Public Key Format : X.509
+
+```
+
+### Weitere kryptographische Protokolle und Sicherheitsstandards (Auswahl):
+
+- IPsec (Internet Protocol Security): zur Sicherung von Internetprotokollen und zur Verschlüsselung von Netzwerkkommunikation auf IP-Ebene (z.B. in private Networks  - VPNs )
+- SSH (Secure Shell): ein Protokoll für die sichere Verbindung zu entfernten Servern über ein unsicheres Netzwerk
+- S/MIME (Secure/Multipurpose Internet Mail Extensions): ist ein Sicherheitsstandard zur  Verschlüsselung und digitale Signatur von E-Mails 
+- OpenVPN: eine Open-Source-Software zur Einrichtung von virtuellen privaten Netzwerken (VPNs), verwendet SSL/TLS für die Verschlüsselung und wird häufig für sichere Remotezugriffe und VPN-Dienste eingesetzt.
+- DTLS (Datagram Transport Layer Security): DTLS ist eine Variante von TLS, die für die sichere Übertragung von Daten über Datagramm-Protokolle wie UDP entwickelt wurde. (verlusttolerante, sichere Kommunikation)
+- Bouncy Castle Crypto Library ist eine weit verbreitete und dokumentierte Bibliothek bietet Unterstützung für DTLS.
+
+> „Sicherheit ist ein Prozess und kein Produkt“ - Christopher Kunz, Heise Security
+
+
 ### TCP-Socket und Threadpool in einer Android-Anwendung
+
 ```java
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -852,7 +1434,7 @@ public class Client {
 	public static void main(String[] args) {
 		Socket socket;
 		try{
-		    socket= new Socket("139.20.16.xxx",5556);
+		    socket= new Socket("139.20.16.xxx",55556);
 		    PrintWriter pw = new PrintWriter(socket.getOutputStream());
 		    pw.println("Greetings!");
 		    pw.flush();
@@ -880,8 +1462,8 @@ public class MainActivity extends AppCompatActivity {
         public String call() throws Exception {
              Socket socket;
              try{
-              socket=new Socket("10.0.2.2",5556);
-	            //("139.20.16.xxx",5556);             
+              socket=new Socket("10.0.2.2",55556);
+	            //("139.20.16.xxx",55556);             
               PrintWriter pw = new PrintWriter(socket.getOutputStream(),true);
               pw.println(text);
               pw.flush();
@@ -922,112 +1504,6 @@ public class MainActivity extends AppCompatActivity {
 }
 
 ```
-
-### TCP vs UDP
-
-**TCP:** Pakete werden nacheinander zugestellt, vollständig, in der richtigen Reihenfolge und nicht doppelt
-
-**UDP:** Pakete werden zugestellt ohne Garantie, dass alle Pakete ankommen, in der richtigen Reihenfolge, jedes einmal. Ggf. Korrektur –, Sicherungsmaßnahmen notwendig 
-
-![tcpvsudp](images/sockets/tcpvsudp.PNG)
-
-## Synchronisation
-
-TCP:  verwendet Sequenznummern
-
-Sequenznummern: triviale Form einer logischen Uhr
-
-**Funktionsschema:**
-- Jedem Paket wird eine Sequenznummer zugeordnet und die nächste Sequenznummer mit abgeschickt
-- Empfänger kennt aus der Sequenznummer des vorangegangenes Pakets, welche Nachricht dran ist 
-- Wird die Nachricht mit der niedrigeren Nummer empfangen, so wird sie verworfen
-- Die Nachricht mit der höheren Nummer wird empfangen und in den Zwischenspeicher abgelegt
-- Wenn die Nachricht mit der richtigen Nummer angekommen ist, wird Zwischenspeicher abgearbeitet
-- Kommt die Nachricht nicht, wird sie nach einer gewissen Zeit von Sender abgefordert
-- Nach einer gewissen Anzahl erfolgslosen Rückfragen bricht die Kommunikation mit einer Fehlermeldung ab
-
-**Echtzeituhr:**
-
-- misst physikalische Zeit 
-- Synchronisation erfolgt, z.B. mittels Abfrage von Zeitservern und Umrechnungen der Verzögerung durch Übertragungszeit (verschiedene Algorithmen, Standard: Network Time Protokoll)
-
-**Logische Uhr:**
-
-- misst nicht die physikalische Zeit, gib den  Ereignissen einen eindeutigen (logischen) Zeitstempel
-- erzeugt streng monoton steigende Werte, um den Ereignissen eine Kasualordnung zuzuweisen
-
-
-**Verfahren zum Zuweisen von eindeutigen Zeitstempeln an Nachrichten:**
-
-**Lamport-Uhr:**
-- Jeder Prozess hat einen Zähler (die Uhr)
-- Der aktuelle Stand des Zählers wird an jede Nachricht als Zeitstempel angehängt
-- Zähler wird bei jedem Ereignis (Senden und Empfangen) erhöht: wenn eine Nachricht empfangen wird, deren Zeitstempel größer oder gleich dem aktuellen Stand der eigenen Uhr ist, wird der Wert der Uhr um eins erhöht. 
-- Nachteil: unbekannt, welche Ereignisse kausal unabhängig (nebenläufig) sind
-
-**Vektoruhr:**
-- Berücksichtigt Nebenläufigkeit
-- die Uhr jedes Prozesses besteht aus einem Vektor (Array), nicht nur einem Zähler
-- Jeder Prozess merkt sich den Zählerstand aller anderen Prozesse
-- Der aktuelle Stand der Uhr wird jeder gesendeten Nachricht angehängt 
-- Bei jedem Ereignis wird immer nur der eigene Zähler erhöht
-- Wird eine Nachricht empfangen, werden aus dem aktuellen und dem empfangenen Vektor elementweise Maxima gebildet
-
-## Transport Layer Security – TLS 
-
-![TLS](images/sockets/tls.png)
-
-Quelle: https://de.wikipedia.org/wiki/Transport_Layer_Security
-
-- Protokoll zur sicheren Datenübertragung über Computernetzwerke, insbesondere im Internet
-- Aufgabe: die Echtheit des kontaktierten Servers durch ein Zertifikat zu garantieren und die Verbindung zwischen Client und Server zu verschlüsseln.
-
-**Bestandteile:** 
-TLS Handshake - findet Schlüsselaustausch und eine Authentifizierung statt 
-TLS Record - verwendet den im Handshake ausgehandelten symmetrischen Schlüssel für eine sichere Datenübertragung – die Daten werden verschlüsselt und mit einem MAC (Message Authentication Code) gegen Veränderungen geschützt übertragen. 
-
-**Anwendung:**
-- theoretisch auf alle denkbare Anwendungsprotokolle: HTTP (-Secure), SMTPS, POPS,  IMAPS, …
-
-### TLS-Funktionsweise
-Der Client baut eine Verbindung zum Server auf. Beim ersten „Kontakt“ nutzt TLS die asymmetrische Verschlüsselung. 
-Der Server schickt als Antwort seinen öffentlichen Schlüssel (public Key) und ein SSL/TLS Zertifikat zur Authentifizierung.
-Der Client überprüft die Vertrauenswürdigkeit des Zertifikats und ob der Servername mit dem Zertifikat übereinstimmt. Optional kann sich der Client mit einem eigenen Zertifikat auch gegenüber dem Server authentifizieren. 
-Der Client schickt dem Server einen symmetrischen privaten Schlüssel (eine mit dem öffentlichen Schlüssel des Servers verschlüsselte geheime Zufallszahl), oder beide berechnen den (kombinierten) Schlüssel mit dem Diffie–Hellman-(Merkle) -Schlüsselaustausch (DHM-Protokoll zur Schlüsselvereinbarung)
-Dieser Schlüssel wird benutzt, um alle Nachrichten zu verschlüsseln und durch einen Message Authentication Code abzusichern
-
-**Symmetrische Verschlüsselung:**
-- ein Schlüssel für Verschlüsselung und Entschlüsselung von Daten ("geheimer Schlüssel" )
-- schnell und effizient, eignet sich gut für die Verschlüsselung großer Datenmengen
-- Herausforderung: der geheime Schlüssel sicher zwischen den Kommunikationspartnern auszutauschen
-
-**Asymmetrische (öffentliche) Verschlüsselung:**
-- zwei Schlüssel (öffentlicher und privater Schlüssel): der öffentliche Schlüssel zum Verschlüsseln, der private Schlüssel zum Entschlüsseln von Daten
-- ist in der Regel langsamer und rechenintensiver als symmetrische Verschlüsselung
-- wird daher oft für den sicheren Austausch von Schlüsseln und die digitale Signierung verwendet, während die eigentliche Datenverschlüsselung mit einem symmetrischen Schlüssel erfolgt
-
-### Ein SSL/TLS-Zertifikat 
-- ist eine elektronische Datei, die von einer vertrauenswürdigen Zertifizierungsstelle (Certificate Authority, CA) ausgestellt wird. Das Zertifikat enthält Informationen zur Identität des Servers, Website (Inhaber, Domane, …) , ein Ablaufdatum etc.
-
-- wird von der Zertifizierungsstelle digital signiert, um seine Echtheit zu gewährleisten. Damit wird sicher gestellt, dass es nicht gefälscht oder manipuliert wurde.
-
-- Die Zertifikate werden bei Zertifizierungsstellen (ein Unternehmen, eine Non-Profit-Organisation oder eine Behörde ) beantragt. Weltweit gibt es weit über 700 Zertifizierungsstellen. 
-
-- Zertifizierungsstellen überprüfen und bestätigen die Identität des Antragstellers. Die Zertifizierungsdienstanbieter unterliegen der Aufsicht der Bundesnetzagentur.
-
-- Es gibt insgesamt drei Zertifikatstypen (Domain-Validated-Zertifikat – DV, Organisation-Validation-Zertifikat – OV, Extended-Validation-Zertifikat – EV), die sich durch einen unterschiedlichen Prüfaufwand bei der Zertifizierung unterscheiden und so eine entsprechend unterschiedliche Echtheitsstufe garantieren.
-
-- TLS verwendet Zertifizierungsinstanzen nach X.509-Internet-Standard. Die Zertifikate koppeln eine Identität an einen öffentlichen Schlüssel, der zur Authentifizierung und Verschlüsselung verwendet wird.
-
-s. auch https://www.elektronik-kompendium.de/sites/net/1706131.htm
-
-Die meisten Webbrowser und Betriebssysteme erhalten eine vordefinierten Liste von vertrauenswürdigen Zertifizierungsstellen. Legt der Server ein SSL/TLS-Zertifikat, das von einer dieser Stellen ausgestellt wurde, wird die Verbindung als sicher betrachtet. Andernfalls zeigt der Browser eine Warnung an.
-Hosting-Anbieter für Websites oder Cloud-Plattform- Betreiber bieten ggf. integrierte Funktionen zur Beschaffung und Verwaltung von SSL/TLS-Zertifikaten. 
-
-![tubafzertifikat](images/sockets/tubafzertifikat.png)
-
-GEANT Trusted Certificate Services des Deutschen Forschungsnetzes
-https://www.pki.dfn.de/geant-trusted-certificate-services/
 
 
 
